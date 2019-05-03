@@ -67,10 +67,9 @@ ri.Rotate(25, 0, 1, 0)
 
 ri.ArchiveRecord(ri.COMMENT, 'head')
 ri.TransformBegin() #HEAD BEGIN--------------------------------------{
-#ri.Translate( 0,0,0)
-#ri.Rotate( 25,1,1,0)
-#ri.Skew(45.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0)
-#ri.Cylinder(1,-0.5,0.5,360)
+ri.Translate(-0.1,0.5,0.1)
+ri.Rotate(90,1,0,0)
+ri.Cylinder(0.15,-0.125,0.125,360)
 ri.TransformEnd() #HEAD END------------------------------------------}
 
 ri.ArchiveRecord(ri.COMMENT, 'chest')
@@ -124,7 +123,7 @@ ri.TransformEnd() #LEGO FIGURE END---------------------------------------------}
 ri.ArchiveRecord(ri.COMMENT, 'table')
 ri.TransformBegin() #TABLE BEGIN-----------------------------------------------{
 ri.Rotate(20,0,1,0)
-ri.Translate(-3,-1.3,-1)
+ri.Translate(-3,-1.3,-1.5)
 Cube(8,0.5,5)
 ri.TransformEnd() #TABLE END---------------------------------------------------}
 
