@@ -2,7 +2,7 @@
 # import the python renderman library
 import prman
 
-# cube definition from Cube.py by John Macey (https://github.com/NCCA/Renderman/blob/master/Lecture1Intro/Cube.py)
+# cube definition from Cube.py by Jon Macey (https://github.com/NCCA/Renderman/blob/master/Lecture1Intro/Cube.py)
 def Cube(width=1.0,height=1.0,depth=1.0) :	
 	w=width/2.0
 	h=height/2.0
@@ -28,6 +28,14 @@ def Cube(width=1.0,height=1.0,depth=1.0) :
 	ri.Patch("bilinear",{'P':face})
 	ri.ArchiveRecord(ri.COMMENT, '--End of Cube Function--')
 
+# load osl shader definition is from scene.py by Jon Macey (https://github.com/NCCA/Renderman/blob/master/Lecture4Shaders/scene.py)
+def checkAndCompileShader(shader) :
+  	if os.path.isfile(shader+'.oso') != True  or os.stat(shader+'.osl').st_mtime - os.stat(shader+'.oso').st_mtime > 0 :
+		print 'compiling shader %s' %(shader)
+		try :
+			subprocess.check_call(['oslc', shader+'.osl'])
+		except subprocess.CalledProcessError :
+			sys.exit('shader compilation failed')
 
 
 ri = prman.Ri() # create an instance of the RenderMan interface
@@ -89,7 +97,7 @@ ri.ArchiveRecord(ri.COMMENT, 'waist')
 ri.TransformBegin() #WAIST BEGIN---------------------------{
 ri.Translate(-0.12,-0.5,0.1)
 Cube(0.43,0.1,0.3)
-ri.Translate(0,-0.15,0)
+ri.Translate(-0.003,-0.145,0)
 ri.Rotate(90,0,1,0)
 ri.Cylinder(0.14,-0.02,0.02,360)
 ri.Translate(0,0,0.02)
