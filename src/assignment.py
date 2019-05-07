@@ -45,6 +45,13 @@ ri.Format(1920,1080,1)
 # set the projection to perspective
 ri.Projection(ri.PERSPECTIVE,{ri.FOV:50}) 
 
+# set the depth of field (fstop, focal length, focal distance)
+#ri.DepthOfField(3.2,0.01,0.75)
+
+# update render type to apply shadows
+ri.Hider('raytrace', {'int incremental' :[1]})
+ri.Integrator('PxrPathTracer', 'integrator')
+
 # Start the world
 ri.WorldBegin()
 
@@ -55,7 +62,6 @@ ri.Rotate(180,0,1,0)
 ri.Rotate(25,0,0,1)
 ri.Light("PxrDomeLight","hdrLight", {"float exposure" : [0], "string lightColorMap" : ["../img/hdr_4k.tx"]})
 ri.TransformEnd() #LIGHT End---------------------------------------------------{
-
 
 ri.ArchiveRecord(ri.COMMENT, 'move everything back')
 ri.Translate(0,0,4)
@@ -91,7 +97,7 @@ ri.Disk(0,0.14,360)
 ri.TransformEnd() #WAIST END-------------------------------}
 
 ri.ArchiveRecord(ri.COMMENT, 'left leg')
-ri.TransformBegin() #LEFT LEG BEGIN-----------------------{
+ri.TransformBegin() #LEFT LEG BEGIN------------------------{
 ri.Translate(0,-1.0,0)
 Cube(0.2,0.1,0.1)
 ri.Translate(0,0.15,0.15)
@@ -101,10 +107,10 @@ ri.Rotate(90,0,1,0)
 ri.Cylinder(0.14,-0.1,0.1,360)
 ri.Translate(0,0,0.1)
 ri.Disk(0,0.14,360)
-ri.TransformEnd() #LEFT LEG END---------------------------}
+ri.TransformEnd() #LEFT LEG END----------------------------}
 
 ri.ArchiveRecord(ri.COMMENT, 'right leg')
-ri.TransformBegin() #RIGHT LEG BEGIN------------------------{
+ri.TransformBegin() #RIGHT LEG BEGIN-----------------------{
 ri.Translate(-0.25,-1.0,0)
 Cube(0.2,0.1,0.1)
 ri.Translate(0,0.15,0.15)
