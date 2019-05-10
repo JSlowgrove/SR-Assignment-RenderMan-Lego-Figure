@@ -1,26 +1,61 @@
+//this is a heavily modified function from https://blendersushi.blogspot.com/2013/08/osl-shader-writing-journey-to-unknown.html
+float circle(float x, float y)
+{
+	//calculate the postion on the circle
+	float newX = x*cos(0.2) - y*sin(0.2);
+	float neyY = x*sin(0.2) + y*cos(0.2);
+	//set the postion of the circle
+	x = x - 0.105;
+	y = y + 0.125;
+	float h = x*x + y*y;
+	float b = h*20; //set the size of the circle
+	return b;
+}
+
 shader chestShader
 (
-	color checkColour = color(0,0,0),
+	string chestType = "",
+	color detailColour = color(0,0,0),
 	color baseColour = color(1,1,1),
 	point PP=transform("chestCoords", P),
 	float repeatU=15,
 	float repeatV=15,
 	float s=PP[0],
 	float t=PP[1],
+	float dispScale=0.5,
 	output color resultRGB=1,
 	output float resultF=0,
+	output float resultDisplacement=0
 )
 {
-	if(PP[2] < -0.05)
+	//get the yz positon
+	float y = PP[1];
+	float z = PP[2];
+
+	//get the return value of the circle check
+	float circleCheck = circle(z,y);
+	//set the value based in if the position lies within the circle
+	if(circleCheck > 0.1)
 	{
-		float sTile=floor(s*repeatU);
-		float tTile=floor(t*repeatV);
-		float inCheck=mod(sTile+tTile,2);
-		resultRGB=mix(baseColour,checkColour,inCheck);
-		resultF=inCheck;
+		circleCheck = 0;
 	}
 	else
 	{
-		resultRGB=baseColour;
+		circleCheck = 1;
 	}
+
+	resultRGB=baseColour;
+
+	if(PP[2] < -0.05)
+	{
+		if(chestType == "check")
+		{
+			float sTile=floor(s*repeatU);
+			float tTile=floor(t*repeatV);
+			float inCheck=mod(sTile+tTile,2);
+			resultRGB=mix(baseColour,detailColour,inCheck);
+			resultF=inCheck;
+		}
+	}
+	resultDisplacement = circleCheck * -dispScale;
 }

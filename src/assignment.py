@@ -73,9 +73,20 @@ def headShader() :
 # the definiton of the shader to use on the chest
 def chestShader() :
 	ri.CoordinateSystem("chestCoords")
+	ri.Attribute('displacementbound', 
+    {
+        'sphere' : [1],
+        'coordinatesystem' : ['shader']
+    })
+	ri.Displace('PxrDisplace', 'myDisp',
+	{
+		'float dispAmount' : [2],
+		'reference float dispScalar' : ['chestShader:resultDisplacement']
+	})
 	ri.Pattern('chestShader','chestShader', 
 	{ 
-		'color checkColour' : [1,1,1],
+		'string chestType' : ["check"],
+		'color detailColour' : [1,1,1],
 		'color baseColour' : [0,0,0.3]
 	})
 	ri.Bxdf('PxrSurface', 'plastic',
@@ -150,8 +161,8 @@ def drawScene(ri) :
 	#********************************HEAD BEGIN**********************************
 	ri.ArchiveRecord(ri.COMMENT, 'head')
 	# set the shader to use
-	headShader()
 	ri.AttributeBegin()
+	headShader()
 	ri.Attribute( 'identifier',{ 'name' :'head'})
 	ri.TransformBegin() 
 	ri.Translate(-0.13,0.2,0.1)
@@ -170,8 +181,8 @@ def drawScene(ri) :
 	#*******************************CHEST BEGIN**********************************
 	ri.ArchiveRecord(ri.COMMENT, 'chest')
 	# set the shader to use
-	chestShader()
 	ri.AttributeBegin()
+	chestShader()
 	ri.Attribute( 'identifier',{ 'name' :'chest'})
 	ri.TransformBegin() 
 	ri.Translate(-0.12,-0.23,0.1)
@@ -183,6 +194,7 @@ def drawScene(ri) :
 	#********************************LEGS BEGIN**********************************
 	ri.ArchiveRecord(ri.COMMENT, 'legs group')
 	# set the shader to use
+	ri.AttributeBegin()
 	legsShader()
 	ri.TransformBegin()
 
@@ -239,6 +251,7 @@ def drawScene(ri) :
 	#------------------------------RIGHT LEG END---------------------------------
 
 	ri.TransformEnd()
+	ri.AttributeEnd()
 	#*********************************LEGS END***********************************
 
 	ri.TransformEnd() 
@@ -247,8 +260,8 @@ def drawScene(ri) :
 	#################################TABLE BEGIN#################################
 	ri.ArchiveRecord(ri.COMMENT, 'table')
 	# set the shader to use
-	tableShader()
 	ri.AttributeBegin()
+	tableShader()
 	ri.Attribute( 'identifier',{ 'name' :'table'})
 	ri.TransformBegin() 
 	ri.Rotate(20,0,1,0)
