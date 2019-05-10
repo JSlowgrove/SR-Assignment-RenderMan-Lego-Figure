@@ -48,7 +48,7 @@ def convertColourValue(colourValue) :
 def legsShader() :
 	ri.Pattern('legsShader','legsShader', 
 	{ 
-		'color colourIn' : [0,0,1]
+		'color colourIn' : [1,0,0]
 	})
 	ri.Bxdf('PxrSurface', 'plastic',
 	{
@@ -74,7 +74,7 @@ def headShader() :
 def chestShader() :
 	ri.Pattern('chestShader','chestShader', 
 	{ 
-		'color colourIn' : [1,0,0]
+		'color colourIn' : [0,0,1]
 	})
 	ri.Bxdf('PxrSurface', 'plastic',
 	{
