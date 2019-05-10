@@ -1,6 +1,9 @@
 #!/usr/bin/python
 # import the python renderman library
 import prman
+# import the system libraries
+import sys
+import sys,os.path,subprocess
 
 # cube definition from Cube.py by Jon Macey (https://github.com/NCCA/Renderman/blob/master/Lecture1Intro/Cube.py)
 def Cube(width=1.0,height=1.0,depth=1.0) :	
@@ -89,6 +92,25 @@ ri.TransformEnd() #HEAD END------------------------------------------}
 ri.ArchiveRecord(ri.COMMENT, 'chest')
 ri.TransformBegin() #CHEST BEGIN-------------------------------------{
 ri.TransformEnd() #CHEST END-----------------------------------------}
+
+
+checkAndCompileShader('legsShader')
+
+ri.Pattern('legsShader','legsShader', 
+{ 
+	'string direction' : ["vertical"],
+	'color C1' : [0,0,1], 
+	'color C2' : [0,1,0]
+})
+ri.Bxdf('PxrSurface', 'plastic',
+{
+	'reference color diffuseColor' : ['legsShader:Cout'],
+	'int diffuseDoubleSided' : [1]
+
+})
+
+
+
 
 ri.ArchiveRecord(ri.COMMENT, 'legs group')
 ri.TransformBegin() #LEGS BEGIN--------------------------------------{
