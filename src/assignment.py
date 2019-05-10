@@ -44,9 +44,7 @@ def checkAndCompileShader(shader) :
 def legsShader() :
 	ri.Pattern('legsShader','legsShader', 
 	{ 
-		'string direction' : ["vertical"],
-		'color C1' : [1,0,0], 
-		'color C2' : [0,0,1]
+		'color colourIn' : [0,0,1]
 	})
 	ri.Bxdf('PxrSurface', 'plastic',
 	{
@@ -59,9 +57,7 @@ def legsShader() :
 def headShader() :
 	ri.Pattern('headShader','headShader', 
 	{ 
-		'string direction' : ["vertical"],
-		'color C1' : [0,1,0], 
-		'color C2' : [1,0,0]
+		'color colourIn' : [1,1,0]
 	})
 	ri.Bxdf('PxrSurface', 'plastic',
 	{
@@ -74,9 +70,7 @@ def headShader() :
 def chestShader() :
 	ri.Pattern('chestShader','chestShader', 
 	{ 
-		'string direction' : ["vertical"],
-		'color C1' : [1,1,1], 
-		'color C2' : [0,1,0]
+		'color colourIn' : [1,0,0]
 	})
 	ri.Bxdf('PxrSurface', 'plastic',
 	{
@@ -89,11 +83,9 @@ def chestShader() :
 def tableShader() :
 	ri.Pattern('tableShader','tableShader', 
 	{ 
-		'string direction' : ["vertical"],
-		'color C1' : [0,1,0], 
-		'color C2' : [0,0,1]
+		'string TextureName' : ["../img/table.tx"]
 	})
-	ri.Bxdf('PxrSurface', 'plastic',
+	ri.Bxdf('PxrSurface', 'wood',
 	{
 		'reference color diffuseColor' : ['tableShader:Cout'],
 		'int diffuseDoubleSided' : [1]
@@ -220,7 +212,8 @@ if __name__ == '__main__':
 	ri.ArchiveRecord(ri.COMMENT, 'assignment.rib')
 
 	# Initalise Renderman in Python
-	ri.Begin("__render") #filename)
+	ri.Begin("__render") # render to it
+	#ri.Begin(filename) # write to a .rib
 	# Specify the output
 	ri.Display("assignment.exr", "it", "rgba")
 	# Specify 1080p resolution 1:1 pixel Aspect ratio
@@ -229,7 +222,7 @@ if __name__ == '__main__':
 	ri.Projection(ri.PERSPECTIVE,{ri.FOV:50}) 
 
 	# set the depth of field (fstop, focal length, focal distance)
-	#ri.DepthOfField(3.2,0.01,0.75)
+	ri.DepthOfField(3.2,0.01,1)
 
 	# update render type to apply shadows
 	ri.Hider('raytrace', {'int incremental' :[1]})
