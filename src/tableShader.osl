@@ -1,6 +1,6 @@
 shader tableShader(
 	color Cin=1,
-	string TextureName="../img/table.tx",
+	string TextureName="",
 	output	color Cout=0
 )
 {

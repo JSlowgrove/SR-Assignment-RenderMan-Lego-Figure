@@ -48,7 +48,7 @@ def convertColourValue(colourValue) :
 def legsShader() :
 	ri.Pattern('legsShader','legsShader', 
 	{ 
-		'color colourIn' : [1,0,0]
+		'color colourIn' : [0.6,0,0]
 	})
 	ri.Bxdf('PxrSurface', 'plastic',
 	{
@@ -61,7 +61,7 @@ def legsShader() :
 def headShader() :
 	ri.Pattern('headShader','headShader', 
 	{ 
-		'color colourIn' : [convertColourValue(255),convertColourValue(227),convertColourValue(48)]
+		'color colourIn' : [convertColourValue(220),convertColourValue(150),convertColourValue(10)]
 	})
 	ri.Bxdf('PxrSurface', 'plastic',
 	{
@@ -72,13 +72,15 @@ def headShader() :
 
 # the definiton of the shader to use on the chest
 def chestShader() :
+	ri.CoordinateSystem("chestCoords")
 	ri.Pattern('chestShader','chestShader', 
 	{ 
-		'color colourIn' : [0,0,1]
+		'color checkColour' : [1,1,1],
+		'color baseColour' : [0,0,0.3]
 	})
 	ri.Bxdf('PxrSurface', 'plastic',
 	{
-		'reference color diffuseColor' : ['chestShader:Cout'],
+		'reference color diffuseColor' : ['chestShader:resultRGB'],
 		'int diffuseDoubleSided' : [1]
 
 	})

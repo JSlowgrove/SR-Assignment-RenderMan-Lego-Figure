@@ -1,8 +1,26 @@
-shader chestShader(
- color colourIn = color(1,0,0),
- output	color Cout=0 
-
+shader chestShader
+(
+	color checkColour = color(0,0,0),
+	color baseColour = color(1,1,1),
+	point PP=transform("chestCoords", P),
+	float repeatU=15,
+	float repeatV=15,
+	float s=PP[0],
+	float t=PP[1],
+	output color resultRGB=1,
+	output float resultF=0,
 )
 {
-Cout=colourIn;	
+	if(PP[2] < -0.05)
+	{
+		float sTile=floor(s*repeatU);
+		float tTile=floor(t*repeatV);
+		float inCheck=mod(sTile+tTile,2);
+		resultRGB=mix(baseColour,checkColour,inCheck);
+		resultF=inCheck;
+	}
+	else
+	{
+		resultRGB=baseColour;
+	}
 }
