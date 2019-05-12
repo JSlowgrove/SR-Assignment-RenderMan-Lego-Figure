@@ -318,6 +318,10 @@ if __name__ == '__main__':
 	# Start the world
 	ri.WorldBegin()
 
+	# rotate the scene for 2nd image
+	ri.TransformBegin()
+	#ri.Rotate(25,0,1,0)
+
 	###################################LIGHT BEGIN###################################
 	#hdr light & background
 	ri.TransformBegin()
@@ -332,6 +336,8 @@ if __name__ == '__main__':
 	ri.Translate(0,0,4)
 
 	drawScene(ri)
+
+	ri.TransformEnd()
 
 	ri.WorldEnd()
 	ri.End()
