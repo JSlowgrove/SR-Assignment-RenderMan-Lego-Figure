@@ -16,7 +16,7 @@ shader chestShader
 (
 	string chestType = "",
 	color detailColour = color(0,0,0),
-	color baseColour = color(1,1,1),
+	color baseColour = color(0,0,0),
 	point PP=transform("chestCoords", P),
 	float repeatU=15,
 	float repeatV=15,

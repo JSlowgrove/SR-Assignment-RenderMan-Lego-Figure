@@ -45,10 +45,10 @@ def convertColourValue(colourValue) :
 	return colourValue / 255.0
 
 # the definiton of the shader to use on the legs
-def legsShader() :
+def legsShader(legsColour) :
 	ri.Pattern('legsShader','legsShader', 
 	{ 
-		'color colourIn' : [0.6,0,0]
+		'color colourIn' : legsColour
 	})
 	ri.Bxdf('PxrSurface', 'plastic',
 	{
@@ -58,10 +58,10 @@ def legsShader() :
 	})
 
 # the definiton of the shader to use on the head
-def headShader() :
+def headShader(headColour) :
 	ri.Pattern('headShader','headShader', 
 	{ 
-		'color colourIn' : [convertColourValue(220),convertColourValue(150),convertColourValue(10)]
+		'color colourIn' : headColour
 	})
 	ri.Bxdf('PxrSurface', 'plastic',
 	{
@@ -71,7 +71,7 @@ def headShader() :
 	})
 
 # the definiton of the shader to use on the chest
-def chestShader() :
+def chestShader(chestType, chestBaseColour, chestDetailColour) :
 	ri.CoordinateSystem("chestCoords")
 	ri.Attribute('displacementbound', 
     {
@@ -85,9 +85,9 @@ def chestShader() :
 	})
 	ri.Pattern('chestShader','chestShader', 
 	{ 
-		'string chestType' : ["check"],
-		'color detailColour' : [1,1,1],
-		'color baseColour' : [0,0,0.3]
+		'string chestType' : [chestType],
+		'color detailColour' : chestDetailColour,
+		'color baseColour' : chestBaseColour
 	})
 	ri.Bxdf('PxrSurface', 'plastic',
 	{
@@ -151,7 +151,7 @@ def chest(xScale,yScale,zScale) :
 
 
 # the definition of the scene to generate
-def drawScene(ri) :
+def drawScene(ri,chestType, chestBaseColour, chestDetailColour, headColour, legsColour) :
 	##############################LEGO FIGURE BEGIN##############################
 	ri.ArchiveRecord(ri.COMMENT, 'lego figure group')
 	ri.TransformBegin()
@@ -162,7 +162,7 @@ def drawScene(ri) :
 	ri.ArchiveRecord(ri.COMMENT, 'head')
 	# set the shader to use
 	ri.AttributeBegin()
-	headShader()
+	headShader(headColour)
 	ri.Attribute( 'identifier',{ 'name' :'head'})
 	ri.TransformBegin() 
 	ri.Translate(-0.13,0.2,0.1)
@@ -182,7 +182,7 @@ def drawScene(ri) :
 	ri.ArchiveRecord(ri.COMMENT, 'chest')
 	# set the shader to use
 	ri.AttributeBegin()
-	chestShader()
+	chestShader(chestType, chestBaseColour, chestDetailColour)
 	ri.Attribute( 'identifier',{ 'name' :'chest'})
 	ri.TransformBegin() 
 	ri.Translate(-0.12,-0.23,0.1)
@@ -195,7 +195,7 @@ def drawScene(ri) :
 	ri.ArchiveRecord(ri.COMMENT, 'legs group')
 	# set the shader to use
 	ri.AttributeBegin()
-	legsShader()
+	legsShader(legsColour)
 	ri.TransformBegin()
 
 	#-------------------------------WAIST BEGIN----------------------------------
@@ -292,6 +292,13 @@ if __name__ == '__main__':
 	filename = "assignment.rib"
 	ri.ArchiveRecord(ri.COMMENT, 'assignment.rib')
 
+	# Initalise the default values for the figure generaion
+	chestType = "check"
+	chestBaseColour = [0,0,0.3]
+	chestDetailColour = [1,1,1]
+	headColour = [convertColourValue(220),convertColourValue(150),convertColourValue(10)]
+	legsColour = [0.6,0,0]
+
 	# Initalise Renderman in Python
 	ri.Begin("__render") # render to it
 	#ri.Begin(filename) # write to a .rib
@@ -335,7 +342,7 @@ if __name__ == '__main__':
 	ri.ArchiveRecord(ri.COMMENT, 'move everything back')
 	ri.Translate(0,0,4)
 
-	drawScene(ri)
+	drawScene(ri,chestType, chestBaseColour, chestDetailColour, headColour, legsColour)
 
 	ri.TransformEnd()
 

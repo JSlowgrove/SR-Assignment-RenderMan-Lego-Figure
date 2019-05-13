@@ -1,5 +1,5 @@
 shader legsShader(
- color colourIn = color(1,0,0),
+ color colourIn = color(0,0,0),
  output	color Cout=0 
 
 )
