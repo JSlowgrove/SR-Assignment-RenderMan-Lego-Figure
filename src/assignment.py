@@ -4,6 +4,7 @@ import prman
 # import the system libraries
 import sys
 import sys,os.path,subprocess
+import string
 
 # cube definition from Cube.py by Jon Macey (https://github.com/NCCA/Renderman/blob/master/Lecture1Intro/Cube.py)
 def Cube(width=1.0,height=1.0,depth=1.0) :	
@@ -286,11 +287,6 @@ def drawScene(ri,chestType, chestBaseColour, chestDetailColour, headColour, legs
 
 # the main function
 if __name__ == '__main__':
-	ri = prman.Ri() # create an instance of the RenderMan interface
-	ri.Option("rib", {"string asciistyle": "indented"})
-
-	filename = "assignment.rib"
-	ri.ArchiveRecord(ri.COMMENT, 'assignment.rib')
 
 	# Initalise the default values for the figure generaion
 	chestType = "check"
@@ -298,6 +294,32 @@ if __name__ == '__main__':
 	chestDetailColour = [1,1,1]
 	headColour = [convertColourValue(220),convertColourValue(150),convertColourValue(10)]
 	legsColour = [0.6,0,0]
+
+	# Check command line inputs
+	if len(sys.argv) < 2:
+		print("No argument passed in, using default values")
+	else:
+		passedCmds = sys.argv[1:]
+
+		#check for chest type command
+		for i in range(0, len(sys.argv)):
+			if string.lower(sys.argv[i]) == "-ct" or string.lower(sys.argv[i]) == "--chest-type":
+				# check if valid chest type
+				if sys.argv[i+1] == "blank" or sys.argv[i+1] == "check":
+					chestType = sys.argv[i+1]
+					print "Using '" + chestType + "' as chest type"
+				else:
+					print "Invalid chest type passed in, using default type"
+				# remove --chest-base from passed in commands
+				passedCmds.pop(i-1)
+				# remove the colour from passed in commands
+				passedCmds.pop(i-1)
+
+	ri = prman.Ri() # create an instance of the RenderMan interface
+	ri.Option("rib", {"string asciistyle": "indented"})
+
+	filename = "assignment.rib"
+	ri.ArchiveRecord(ri.COMMENT, 'assignment.rib')
 
 	# Initalise Renderman in Python
 	ri.Begin("__render") # render to it
