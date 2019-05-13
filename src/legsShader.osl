@@ -1,8 +1,10 @@
 shader legsShader(
- color colourIn = color(0,0,0),
- output	color Cout=0 
-
+    color colourIn = color(0,0,0),
+    output	color Cout=0
 )
 {
-Cout=colourIn;	
+Cout=colourIn;
+//point customSpace = point(P[0]* 10,P[1]* 10,P[2]* 10);
+//color perlinNoise = noise("perlin",customSpace);
+//Cout = mix(color(0.1,0.1,0.1),colourIn,perlinNoise);
 }

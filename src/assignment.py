@@ -331,7 +331,7 @@ if __name__ == '__main__':
 		for i in range(0, len(sys.argv)):
 			if string.lower(sys.argv[i]) == "-ct" or string.lower(sys.argv[i]) == "--chest-type":
 				# check if valid chest type
-				if sys.argv[i+1] == "blank" or sys.argv[i+1] == "check":
+				if sys.argv[i+1] == "blank" or sys.argv[i+1] == "check" or sys.argv[i+1] == "perlin":
 					chestType = sys.argv[i+1]
 					print "Using '" + chestType + "' as chest type"
 				else:

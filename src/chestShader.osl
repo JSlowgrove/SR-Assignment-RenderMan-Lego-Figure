@@ -56,6 +56,12 @@ shader chestShader
 			resultRGB=mix(baseColour,detailColour,inCheck);
 			resultF=inCheck;
 		}
+		if(chestType == "perlin")
+		{
+			point customSpace = point(P[0]* 10,P[1]* 10,P[2]* 10);
+			color perlinNoise = noise("perlin",customSpace);
+			resultRGB = mix(baseColour,detailColour,perlinNoise);
+		}
 	}
 	resultDisplacement = circleCheck * -dispScale;
 }
