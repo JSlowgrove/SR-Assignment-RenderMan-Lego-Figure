@@ -10,7 +10,8 @@ Commands:
 -hc or --head-colour sets the colour of the head, the values can be either values of either 0.0-1.0 or 0-255 and have to have the format set as a command after either as -1 or 255 (Example command:  python assignment.py -hc 0.0,0.4,1 -1)(Example command:  python assignment.py -hc 0,30,255 -255)  
 -alt or --alternate-angle sets the angle of the scene to that of the alternate angle (Example command: python assignment.py -alt)  
 -o or --output sets the type of output to generate, current options are ["it","rib","exr"] (Example command: python assignment.py -o exr)  
+-fn or --file-name sets a custom output filename (Example command: python assignment.py -fn my_filename)  
   
-HDRI: https://hdrihaven.com/hdri/?c=indoor&h=aerodynamics_workshop
+HDRI: https://hdrihaven.com/hdri/?c=indoor&h=aerodynamics_workshop  
 Table Texture: https://freestocktextures.com/texture/wooden-plank-wall,1111.html  
 

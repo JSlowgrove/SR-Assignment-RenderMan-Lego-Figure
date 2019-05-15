@@ -351,6 +351,7 @@ if __name__ == '__main__':
 	headColour = [convertColourValue(220),convertColourValue(150),convertColourValue(10)]
 	legsColour = [0.6,0,0]
 	dirtValue = 0.3
+	customFileName = False
 
 	# Check command line inputs
 	if len(sys.argv) < 2:
@@ -421,12 +422,24 @@ if __name__ == '__main__':
 				except:
 					print "Invalid number passed in, using default dirt value"
 
+		#check for alt angle command
+		for i in range(0, len(sys.argv)):
+			if string.lower(sys.argv[i]) == "-fn" or string.lower(sys.argv[i]) == "--file-name":
+				# set the code to use a custom filename
+				customFileName = True
+				outputFilename = sys.argv[i+1]
 
 	ri = prman.Ri() # create an instance of the RenderMan interface
 	ri.Option("rib", {"string asciistyle": "indented"})
 
-	filename = "assignment.rib"
-	ri.ArchiveRecord(ri.COMMENT, 'assignment.rib')
+	# set the filename based on angle
+	if not altAngle and not customFileName:
+		outputFilename = "assignment"
+	elif not customFileName:
+		outputFilename = "assignment-alt"
+	
+	filename = outputFilename + ".rib"
+	ri.ArchiveRecord(ri.COMMENT, outputFilename + '.rib')
 
 	# Initalise Renderman in Python based on output option
 	if outputType == "it" or outputType == "exr" :
@@ -436,9 +449,9 @@ if __name__ == '__main__':
 
 	# Specify the output based on output option
 	if outputType == "it" or outputType =="rib" :
-		ri.Display("assignment.exr", "it", "rgba") # render to it
+		ri.Display(outputFilename + ".exr", "it", "rgba") # render to it
 	else :
-		ri.Display("assignment.exr", "openexr", "rgba") # export as .exr
+		ri.Display(outputFilename + ".exr", "openexr", "rgba") # export as .exr
 	
 	# Specify 1080p resolution 1:1 pixel Aspect ratio
 	ri.Format(1920,1080,1)

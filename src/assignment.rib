@@ -11,7 +11,7 @@ WorldBegin
 		TransformBegin 
 			Rotate 80 1 0 0
 			Rotate 180 0 1 0
-			Rotate 25 0 0 1
+			Rotate 160 0 0 1
 			Light "PxrDomeLight" "hdrLight" "float exposure" [0] "string lightColorMap" ["../img/hdr_4k.tx"]
 		TransformEnd 
 		#move everything back
@@ -23,8 +23,8 @@ WorldBegin
 			#head
 			AttributeBegin 
 				CoordinateSystem "headCoords"
-				Pattern "headShader" "headShader" "string TextureName" ["../img/face.tx"] "color colourIn" [0.862745106 0.588235319 0.0392156877]
-				Bxdf "PxrSurface" "plastic" "reference color diffuseColor" ["headShader:Cout"] "int diffuseDoubleSided" [1]
+				Pattern "headShader" "headShader" "string TextureName" ["../img/face.tx"] "color colourIn" [0.862745106 0.588235319 0.0392156877] "float dirtValue" [0.300000012]
+				Bxdf "PxrSurface" "plastic" "reference color diffuseColor" ["headShader:Cout"] "float glassRoughness" [0.200000003] "float reflectionGain" [1] "int diffuseDoubleSided" [1]
 				Attribute "identifier" "name" ["head"]
 				TransformBegin 
 					Translate -0.129999995 0.200000003 0.100000001
@@ -499,8 +499,8 @@ WorldBegin
 				CoordinateSystem "chestCoords"
 				Attribute "displacementbound" "sphere" [1] "coordinatesystem" ["shader"]
 				Displace "PxrDisplace" "myDisp" "reference float dispScalar" ["chestShader:resultDisplacement"] "float dispAmount" [2]
-				Pattern "chestShader" "chestShader" "string chestType" ["blank"] "color detailColour" [1 1 1] "color baseColour" [0.00999999978 0.00999999978 0.200000003]
-				Bxdf "PxrSurface" "plastic" "reference color diffuseColor" ["chestShader:resultRGB"] "int diffuseDoubleSided" [1]
+				Pattern "chestShader" "chestShader" "string chestType" ["blank"] "color detailColour" [1 1 1] "color baseColour" [0.0199999996 0.0199999996 0.400000006] "float dirtValue" [0.300000012]
+				Bxdf "PxrSurface" "plastic" "reference color diffuseColor" ["chestShader:resultRGB"] "float glassRoughness" [0.200000003] "float reflectionGain" [1] "int diffuseDoubleSided" [1]
 				Attribute "identifier" "name" ["chest"]
 				TransformBegin 
 					Translate -0.119999997 -0.230000004 0.100000001
@@ -547,10 +547,11 @@ WorldBegin
 			AttributeEnd 
 			#legs group
 			AttributeBegin 
+				CoordinateSystem "legsCoords"
 				Attribute "displacementbound" "sphere" [1] "coordinatesystem" ["shader"]
 				Displace "PxrDisplace" "myDisp" "reference float dispScalar" ["legsShader:resultDisplacement"] "float dispAmount" [2]
-				Pattern "legsShader" "legsShader" "color colourIn" [0.600000024 0 0]
-				Bxdf "PxrSurface" "plastic" "reference color diffuseColor" ["legsShader:Cout"] "int diffuseDoubleSided" [1]
+				Pattern "legsShader" "legsShader" "color colourIn" [0.600000024 0 0] "float dirtValue" [0.300000012]
+				Bxdf "PxrSurface" "plastic" "reference color diffuseColor" ["legsShader:Cout"] "float glassRoughness" [0.200000003] "float reflectionGain" [1] "int diffuseDoubleSided" [1]
 				TransformBegin 
 					#waist
 					AttributeBegin 
@@ -636,7 +637,7 @@ WorldBegin
 		#table
 		AttributeBegin 
 			Pattern "tableShader" "tableShader" "string TextureName" ["../img/table.tx"]
-			Bxdf "PxrSurface" "wood" "reference color diffuseColor" ["tableShader:Cout"] "int diffuseDoubleSided" [1]
+			Bxdf "PxrSurface" "wood" "reference color diffuseColor" ["tableShader:Cout"] "float reflectionGain" [0.200000003] "int diffuseDoubleSided" [1]
 			Attribute "identifier" "name" ["table"]
 			TransformBegin 
 				Rotate 20 0 1 0
