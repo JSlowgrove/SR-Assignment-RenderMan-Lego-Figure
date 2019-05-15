@@ -65,7 +65,8 @@ def legsShader(legsColour, dirtValue) :
 	ri.Bxdf('PxrSurface', 'plastic',
 	{
 		'reference color diffuseColor' : ['legsShader:Cout'],
-		'int diffuseDoubleSided' : [1]
+		'int diffuseDoubleSided' : [1],
+		'float reflectionGain' : [0.5]
 
 	})
 
@@ -81,8 +82,8 @@ def headShader(headColour, dirtValue) :
 	ri.Bxdf('PxrSurface', 'plastic',
 	{
 		'reference color diffuseColor' : ['headShader:Cout'],
-		'int diffuseDoubleSided' : [1]
-
+		'int diffuseDoubleSided' : [1],
+		'float reflectionGain' : [0.5]
 	})
 
 # the definiton of the shader to use on the chest
@@ -108,7 +109,8 @@ def chestShader(chestType, chestBaseColour, chestDetailColour, dirtValue) :
 	ri.Bxdf('PxrSurface', 'plastic',
 	{
 		'reference color diffuseColor' : ['chestShader:resultRGB'],
-		'int diffuseDoubleSided' : [1]
+		'int diffuseDoubleSided' : [1],
+		'float reflectionGain' : [0.5]
 
 	})
 
@@ -121,7 +123,8 @@ def tableShader() :
 	ri.Bxdf('PxrSurface', 'wood',
 	{
 		'reference color diffuseColor' : ['tableShader:Cout'],
-		'int diffuseDoubleSided' : [1]
+		'int diffuseDoubleSided' : [1],
+		'float reflectionGain' : [0.2]
 
 	})
 
