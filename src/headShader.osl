@@ -4,10 +4,18 @@ shader headShader(
     string TextureName="",
     float s=0 [[int lockgeom=0]],
     float t=0 [[int lockgeom=0]],
+    float dirtValue=0,
     output	color Cout=0
 
 )
 {
     float alpha = texture(TextureName,s,t);
-    Cout = mix(detailColour,colourIn,alpha);
+
+	//generate the dirt based on the dirtValue
+	point dirtSpace = point(P[0]* 10,P[1]* 10,P[2]* 10);
+	color dirtNoise = noise("perlin",dirtSpace);
+	float dirtAlpha = dirtNoise[0] * dirtValue;
+	color resultRGB = mix(colourIn,color(0,0,0),dirtAlpha);
+
+    Cout = mix(detailColour,resultRGB,alpha);
 }

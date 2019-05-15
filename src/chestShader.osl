@@ -23,6 +23,7 @@ shader chestShader
 	float s=PP[0],
 	float t=PP[1],
 	float dispScale=0.5,
+	float dirtValue=0,
 	output color resultRGB=1,
 	output float resultF=0,
 	output float resultDisplacement=0
@@ -62,6 +63,27 @@ shader chestShader
 			color perlinNoise = noise("perlin",customSpace);
 			resultRGB = mix(baseColour,detailColour,perlinNoise);
 		}
+		if(chestType == "camo")
+		{
+			point camoSpace = point(P[0]* 15,P[1]* 15,P[2]* 15);
+			color camoNoise = noise("perlin",camoSpace);
+			float camoAlpha = camoNoise[0]*10;
+			if (camoAlpha > 0.1)
+			{
+				resultRGB=mix(baseColour,detailColour,camoAlpha);;
+			}
+			else
+			{
+				resultRGB=baseColour;
+			}
+		}
 	}
+
+	//generate the dirt based on the dirtValue
+	point dirtSpace = point(P[0]* 10,P[1]* 10,P[2]* 10);
+	color dirtNoise = noise("perlin",dirtSpace);
+	float alpha = dirtNoise[0] * dirtValue;
+	resultRGB = mix(resultRGB,color(0,0,0),alpha);
+	
 	resultDisplacement = circleCheck * -dispScale;
 }

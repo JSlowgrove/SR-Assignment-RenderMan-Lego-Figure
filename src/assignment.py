@@ -46,7 +46,7 @@ def convertColourValue(colourValue) :
 	return colourValue / 255.0
 
 # the definiton of the shader to use on the legs
-def legsShader(legsColour) :
+def legsShader(legsColour, dirtValue) :
 	ri.Attribute('displacementbound', 
     {
         'sphere' : [1],
@@ -59,7 +59,8 @@ def legsShader(legsColour) :
 	})
 	ri.Pattern('legsShader','legsShader', 
 	{ 
-		'color colourIn' : legsColour
+		'color colourIn' : legsColour,
+		'float dirtValue' : dirtValue
 	})
 	ri.Bxdf('PxrSurface', 'plastic',
 	{
@@ -69,12 +70,13 @@ def legsShader(legsColour) :
 	})
 
 # the definiton of the shader to use on the head
-def headShader(headColour) :
+def headShader(headColour, dirtValue) :
 	ri.CoordinateSystem("headCoords")
 	ri.Pattern('headShader','headShader', 
 	{ 
 		'color colourIn' : headColour,
-		'string TextureName' : ["../img/face.tx"]
+		'string TextureName' : ["../img/face.tx"],
+		'float dirtValue' : dirtValue
 	})
 	ri.Bxdf('PxrSurface', 'plastic',
 	{
@@ -84,7 +86,7 @@ def headShader(headColour) :
 	})
 
 # the definiton of the shader to use on the chest
-def chestShader(chestType, chestBaseColour, chestDetailColour) :
+def chestShader(chestType, chestBaseColour, chestDetailColour, dirtValue) :
 	ri.CoordinateSystem("chestCoords")
 	ri.Attribute('displacementbound', 
     {
@@ -100,7 +102,8 @@ def chestShader(chestType, chestBaseColour, chestDetailColour) :
 	{ 
 		'string chestType' : [chestType],
 		'color detailColour' : chestDetailColour,
-		'color baseColour' : chestBaseColour
+		'color baseColour' : chestBaseColour,
+		'float dirtValue' : dirtValue
 	})
 	ri.Bxdf('PxrSurface', 'plastic',
 	{
@@ -114,19 +117,6 @@ def tableShader() :
 	ri.Pattern('tableShader','tableShader', 
 	{ 
 		'string TextureName' : ["../img/table.tx"]
-	})
-	ri.Bxdf('PxrSurface', 'wood',
-	{
-		'reference color diffuseColor' : ['tableShader:Cout'],
-		'int diffuseDoubleSided' : [1]
-
-	})
-
-# the definiton of the shader to use on the legs
-def backgroundShader() :
-	ri.Pattern('tableShader','tableShader', 
-	{ 
-		'string TextureName' : ["../img/background.tx"]
 	})
 	ri.Bxdf('PxrSurface', 'wood',
 	{
@@ -205,7 +195,7 @@ def loadColourCmd(cmdNum, cmdNumType, defaultColour):
 	return outColour
 
 # the definition of the scene to generate
-def drawScene(ri,chestType, chestBaseColour, chestDetailColour, headColour, legsColour) :
+def drawScene(ri,chestType, chestBaseColour, chestDetailColour, headColour, legsColour, dirtValue) :
 	##############################LEGO FIGURE BEGIN##############################
 	ri.ArchiveRecord(ri.COMMENT, 'lego figure group')
 	ri.TransformBegin()
@@ -216,7 +206,7 @@ def drawScene(ri,chestType, chestBaseColour, chestDetailColour, headColour, legs
 	ri.ArchiveRecord(ri.COMMENT, 'head')
 	# set the shader to use
 	ri.AttributeBegin()
-	headShader(headColour)
+	headShader(headColour, dirtValue)
 	ri.Attribute( 'identifier',{ 'name' :'head'})
 	ri.TransformBegin() 
 	ri.Translate(-0.13,0.2,0.1)
@@ -237,7 +227,7 @@ def drawScene(ri,chestType, chestBaseColour, chestDetailColour, headColour, legs
 	ri.ArchiveRecord(ri.COMMENT, 'chest')
 	# set the shader to use
 	ri.AttributeBegin()
-	chestShader(chestType, chestBaseColour, chestDetailColour)
+	chestShader(chestType, chestBaseColour, chestDetailColour, dirtValue)
 	ri.Attribute( 'identifier',{ 'name' :'chest'})
 	ri.TransformBegin() 
 	ri.Translate(-0.12,-0.23,0.1)
@@ -250,7 +240,7 @@ def drawScene(ri,chestType, chestBaseColour, chestDetailColour, headColour, legs
 	ri.ArchiveRecord(ri.COMMENT, 'legs group')
 	# set the shader to use
 	ri.AttributeBegin()
-	legsShader(legsColour)
+	legsShader(legsColour, dirtValue)
 	ri.TransformBegin()
 
 	#-------------------------------WAIST BEGIN----------------------------------
@@ -353,6 +343,7 @@ if __name__ == '__main__':
 	chestDetailColour = [1,1,1]
 	headColour = [convertColourValue(220),convertColourValue(150),convertColourValue(10)]
 	legsColour = [0.6,0,0]
+	dirtValue = 0
 
 	# Check command line inputs
 	if len(sys.argv) < 2:
@@ -362,7 +353,7 @@ if __name__ == '__main__':
 		for i in range(0, len(sys.argv)):
 			if string.lower(sys.argv[i]) == "-ct" or string.lower(sys.argv[i]) == "--chest-type":
 				# check if valid chest type
-				if sys.argv[i+1] == "blank" or sys.argv[i+1] == "check" or sys.argv[i+1] == "perlin":
+				if sys.argv[i+1] == "blank" or sys.argv[i+1] == "check" or sys.argv[i+1] == "perlin" or sys.argv[i+1] == "camo":
 					chestType = sys.argv[i+1]
 					print "Using '" + chestType + "' as chest type"
 				else:
@@ -407,6 +398,21 @@ if __name__ == '__main__':
 					print "Using '" + outputType + "' as output type"
 				else:
 					print "Invalid output type passed in, using default type"
+		
+		#check for dirt value command
+		for i in range(0, len(sys.argv)):
+			if string.lower(sys.argv[i]) == "-dv" or string.lower(sys.argv[i]) == "--dirt-value":
+
+				#try to convert to numbers
+				try:
+					loadedNum = float(sys.argv[i+1])
+					if loadedNum >= 0 and loadedNum <= 1:
+						dirtValue = loadedNum
+						print "Dirt value set to " + str(loadedNum)
+					else:
+						print "Invalid number passed in, using default dirt value"
+				except:
+					print "Invalid number passed in, using default dirt value"
 
 
 	ri = prman.Ri() # create an instance of the RenderMan interface
@@ -455,7 +461,6 @@ if __name__ == '__main__':
 
 	###################################LIGHT BEGIN###################################
 	#hdr light & background
-	backgroundShader()
 	ri.TransformBegin()
 	ri.Rotate(80,1,0,0)
 	ri.Rotate(180,0,1,0)
@@ -467,7 +472,7 @@ if __name__ == '__main__':
 	ri.ArchiveRecord(ri.COMMENT, 'move everything back')
 	ri.Translate(0,0,4)
 
-	drawScene(ri,chestType, chestBaseColour, chestDetailColour, headColour, legsColour)
+	drawScene(ri,chestType, chestBaseColour, chestDetailColour, headColour, legsColour, dirtValue)
 
 	ri.TransformEnd()
 

@@ -1,13 +1,16 @@
 shader legsShader(
     color colourIn = color(0,0,0),
-	float dispScale=0.005,
+	float dispScale=1,//0.01,
+    float dirtValue=0,
     output color Cout=0,
 	output float resultDisplacement=0
 )
-{
-    point customSpace = point(P[0]* 10,P[1]* 10,P[2]* 10);
-    float perlinNoise = noise("perlin",customSpace);
+{    
+    //generate the dirt based on the dirtValue
+	point dirtSpace = point(P[0]* 10,P[1]* 10,P[2]* 10);
+	color dirtNoise = noise("perlin",dirtSpace);
+	float dirtAlpha = dirtNoise[0] * dirtValue;
+	color resultRGB = mix(colourIn,color(0,0,0),dirtAlpha);
 
-	resultDisplacement = perlinNoise * -dispScale;
-    Cout=colourIn;
+    Cout = resultRGB;
 }
