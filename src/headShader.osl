@@ -2,13 +2,12 @@ shader headShader(
     color colourIn = color(0,0,0),
     color detailColour = color(0,0,0),
     string TextureName="",
-    output	color Cout=0,
     float s=0 [[int lockgeom=0]],
-    float t=0 [[int lockgeom=0]]
+    float t=0 [[int lockgeom=0]],
+    output	color Cout=0
 
 )
 {
     float alpha = texture(TextureName,s,t);
     Cout = mix(detailColour,colourIn,alpha);
-    //Cout=colourIn;	
 }
