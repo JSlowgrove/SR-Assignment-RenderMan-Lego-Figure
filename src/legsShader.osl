@@ -2,20 +2,21 @@ shader legsShader(
     color colourIn = color(0,0,0),
 	float dispScale=0.00075,
     float dirtValue=0,
+    int damage = 3,
     output color Cout=0,
 	output float resultDisplacement=0
 )
 {
     float fuzz=0.025;
-    float dist;
-    float inLine;
+    float dist=0;
+    float inLine=0;
 	point PP=transform("legsCoords", P);
 	float s=PP[0];
 	float t=PP[1];
     point here=point(u,v,0);
 
     // generate damage based on damage value
-    for(int i = 0; i < 3; ++i) 
+    for(int i = 0; i < damage; ++i) 
     {
         point start=point (cellnoise(s*i,t*i),cellnoise(s*i,t*i),0);
         point end=point (cellnoise(0.5+(s*i),0.5+(t*i)),cellnoise(0.5+(s*i),0.5+(t*i)),0);

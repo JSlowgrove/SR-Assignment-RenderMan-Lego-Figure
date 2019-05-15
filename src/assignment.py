@@ -46,7 +46,7 @@ def convertColourValue(colourValue) :
 	return colourValue / 255.0
 
 # the definiton of the shader to use on the legs
-def legsShader(legsColour, dirtValue) :
+def legsShader(legsColour, dirtValue, damage) :
 	ri.CoordinateSystem("legsCoords")
 	ri.Attribute('displacementbound', 
     {
@@ -61,7 +61,8 @@ def legsShader(legsColour, dirtValue) :
 	ri.Pattern('legsShader','legsShader', 
 	{ 
 		'color colourIn' : legsColour,
-		'float dirtValue' : dirtValue
+		'float dirtValue' : dirtValue,
+		'int damage' : damage
 	})
 	ri.Bxdf('PxrSurface', 'plastic',
 	{
@@ -90,7 +91,7 @@ def headShader(headColour, dirtValue) :
 	})
 
 # the definiton of the shader to use on the chest
-def chestShader(chestType, chestBaseColour, chestDetailColour, dirtValue) :
+def chestShader(chestType, chestBaseColour, chestDetailColour, dirtValue, damage) :
 	ri.CoordinateSystem("chestCoords")
 	ri.Attribute('displacementbound', 
     {
@@ -107,7 +108,8 @@ def chestShader(chestType, chestBaseColour, chestDetailColour, dirtValue) :
 		'string chestType' : [chestType],
 		'color detailColour' : chestDetailColour,
 		'color baseColour' : chestBaseColour,
-		'float dirtValue' : dirtValue
+		'float dirtValue' : dirtValue,
+		'int damage' : damage
 	})
 	ri.Bxdf('PxrSurface', 'plastic',
 	{
@@ -202,7 +204,7 @@ def loadColourCmd(cmdNum, cmdNumType, defaultColour):
 	return outColour
 
 # the definition of the scene to generate
-def drawScene(ri,chestType, chestBaseColour, chestDetailColour, headColour, legsColour, dirtValue) :
+def drawScene(ri,chestType, chestBaseColour, chestDetailColour, headColour, legsColour, dirtValue, damage) :
 	##############################LEGO FIGURE BEGIN##############################
 	ri.ArchiveRecord(ri.COMMENT, 'lego figure group')
 	ri.TransformBegin()
@@ -234,7 +236,7 @@ def drawScene(ri,chestType, chestBaseColour, chestDetailColour, headColour, legs
 	ri.ArchiveRecord(ri.COMMENT, 'chest')
 	# set the shader to use
 	ri.AttributeBegin()
-	chestShader(chestType, chestBaseColour, chestDetailColour, dirtValue)
+	chestShader(chestType, chestBaseColour, chestDetailColour, dirtValue, damage)
 	ri.Attribute( 'identifier',{ 'name' :'chest'})
 	ri.TransformBegin() 
 	ri.Translate(-0.12,-0.23,0.1)
@@ -247,7 +249,7 @@ def drawScene(ri,chestType, chestBaseColour, chestDetailColour, headColour, legs
 	ri.ArchiveRecord(ri.COMMENT, 'legs group')
 	# set the shader to use
 	ri.AttributeBegin()
-	legsShader(legsColour, dirtValue)
+	legsShader(legsColour, dirtValue, damage)
 	ri.TransformBegin()
 
 	#-------------------------------WAIST BEGIN----------------------------------
@@ -352,6 +354,7 @@ if __name__ == '__main__':
 	legsColour = [0.6,0,0]
 	dirtValue = 0.3
 	customFileName = False
+	damage = 3
 
 	# Check command line inputs
 	if len(sys.argv) < 2:
@@ -429,6 +432,21 @@ if __name__ == '__main__':
 				customFileName = True
 				outputFilename = sys.argv[i+1]
 
+		#check for damage value command
+		for i in range(0, len(sys.argv)):
+			if string.lower(sys.argv[i]) == "-d" or string.lower(sys.argv[i]) == "--damage":
+
+				#try to convert to numbers
+				try:
+					loadedNum = int(sys.argv[i+1])
+					if loadedNum >= 0:
+						damage = loadedNum
+						print "Damage value set to " + str(loadedNum)
+					else:
+						print "Invalid number passed in, using default damage value"
+				except:
+					print "Invalid number passed in, using default damage value"
+
 	ri = prman.Ri() # create an instance of the RenderMan interface
 	ri.Option("rib", {"string asciistyle": "indented"})
 
@@ -492,7 +510,7 @@ if __name__ == '__main__':
 	ri.ArchiveRecord(ri.COMMENT, 'move everything back')
 	ri.Translate(0,0,4)
 
-	drawScene(ri,chestType, chestBaseColour, chestDetailColour, headColour, legsColour, dirtValue)
+	drawScene(ri,chestType, chestBaseColour, chestDetailColour, headColour, legsColour, dirtValue, damage)
 
 	ri.TransformEnd()
 

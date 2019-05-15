@@ -82,12 +82,12 @@ shader chestShader
 	}
 
 	float fuzz=0.0025;
-    float dist;
+    float dist=0;
     float inLine=0;
     point here=point(u,v,0);
 
     // generate damage
-    for(int i = 0; i < 3; ++i) 
+    for(int i = 0; i < damage; ++i) 
     {
         point start=point (0.5+cellnoise(v*i,u*i),cellnoise(v*i,u*i),0);
         point end=point (0.5+cellnoise(1+(v*i),1+(u*i)),cellnoise(1+(v*i),1+(u*i)),0);
@@ -96,7 +96,7 @@ shader chestShader
     }
 	
     // generate damage
-    for(int i = 0; i < 3; ++i) 
+    for(int i = 0; i < damage; ++i) 
     {
         point start=point (0.5+cellnoise(v*i,u*i),0.5+cellnoise(v*i,u*i),0);
         point end=point (0.5-cellnoise(1+(v*i),1+(u*i)),0.5+cellnoise(1+(v*i),1+(u*i)),0);
