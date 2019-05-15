@@ -47,16 +47,16 @@ def convertColourValue(colourValue) :
 
 # the definiton of the shader to use on the legs
 def legsShader(legsColour, dirtValue) :
-	ri.Attribute('displacementbound', 
-    {
-        'sphere' : [1],
-        'coordinatesystem' : ['shader']
-    })
-	ri.Displace('PxrDisplace', 'myDisp',
-	{
-		'float dispAmount' : [2],
-		'reference float dispScalar' : ['legsShader:resultDisplacement']
-	})
+	#ri.Attribute('displacementbound', 
+    #{
+    #    'sphere' : [1],
+    #    'coordinatesystem' : ['shader']
+    #})
+	#ri.Displace('PxrDisplace', 'myDisp',
+	#{
+	#	'float dispAmount' : [2],
+	#	'reference float dispScalar' : ['legsShader:resultDisplacement']
+	#})
 	ri.Pattern('legsShader','legsShader', 
 	{ 
 		'color colourIn' : legsColour,
@@ -66,7 +66,8 @@ def legsShader(legsColour, dirtValue) :
 	{
 		'reference color diffuseColor' : ['legsShader:Cout'],
 		'int diffuseDoubleSided' : [1],
-		'float reflectionGain' : [0.5]
+		'float reflectionGain' : [1], 
+		'float glassRoughness' : [0.2]
 
 	})
 
@@ -83,7 +84,8 @@ def headShader(headColour, dirtValue) :
 	{
 		'reference color diffuseColor' : ['headShader:Cout'],
 		'int diffuseDoubleSided' : [1],
-		'float reflectionGain' : [0.5]
+		'float reflectionGain' : [1], 
+		'float glassRoughness' : [0.2]
 	})
 
 # the definiton of the shader to use on the chest
@@ -110,7 +112,8 @@ def chestShader(chestType, chestBaseColour, chestDetailColour, dirtValue) :
 	{
 		'reference color diffuseColor' : ['chestShader:resultRGB'],
 		'int diffuseDoubleSided' : [1],
-		'float reflectionGain' : [0.5]
+		'float reflectionGain' : [1], 
+		'float glassRoughness' : [0.2]
 
 	})
 
@@ -346,7 +349,7 @@ if __name__ == '__main__':
 	chestDetailColour = [1,1,1]
 	headColour = [convertColourValue(220),convertColourValue(150),convertColourValue(10)]
 	legsColour = [0.6,0,0]
-	dirtValue = 0
+	dirtValue = 0.3
 
 	# Check command line inputs
 	if len(sys.argv) < 2:
