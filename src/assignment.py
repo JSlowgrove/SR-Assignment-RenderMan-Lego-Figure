@@ -47,16 +47,17 @@ def convertColourValue(colourValue) :
 
 # the definiton of the shader to use on the legs
 def legsShader(legsColour, dirtValue) :
-	#ri.Attribute('displacementbound', 
-    #{
-    #    'sphere' : [1],
-    #    'coordinatesystem' : ['shader']
-    #})
-	#ri.Displace('PxrDisplace', 'myDisp',
-	#{
-	#	'float dispAmount' : [2],
-	#	'reference float dispScalar' : ['legsShader:resultDisplacement']
-	#})
+	ri.CoordinateSystem("legsCoords")
+	ri.Attribute('displacementbound', 
+    {
+        'sphere' : [1],
+        'coordinatesystem' : ['shader']
+    })
+	ri.Displace('PxrDisplace', 'myDisp',
+	{
+		'float dispAmount' : [2],
+		'reference float dispScalar' : ['legsShader:resultDisplacement']
+	})
 	ri.Pattern('legsShader','legsShader', 
 	{ 
 		'color colourIn' : legsColour,

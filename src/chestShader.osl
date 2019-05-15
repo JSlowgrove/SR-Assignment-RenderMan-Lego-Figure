@@ -23,7 +23,9 @@ shader chestShader
 	float s=PP[0],
 	float t=PP[1],
 	float dispScale=0.5,
+	float scratchDispScale=0.001,
 	float dirtValue=0,
+    int damage = 3,
 	output color resultRGB=1,
 	output float resultF=0,
 	output float resultDisplacement=0
@@ -79,6 +81,29 @@ shader chestShader
 		}
 	}
 
+	float fuzz=0.0025;
+    float dist;
+    float inLine=0;
+    point here=point(u,v,0);
+
+    // generate damage
+    for(int i = 0; i < 3; ++i) 
+    {
+        point start=point (0.5+cellnoise(v*i,u*i),cellnoise(v*i,u*i),0);
+        point end=point (0.5+cellnoise(1+(v*i),1+(u*i)),cellnoise(1+(v*i),1+(u*i)),0);
+        dist=distance(start,end,here);
+        inLine=1-smoothstep(0.01+fuzz,0.01-fuzz,dist);
+    }
+	
+    // generate damage
+    for(int i = 0; i < 3; ++i) 
+    {
+        point start=point (0.5+cellnoise(v*i,u*i),0.5+cellnoise(v*i,u*i),0);
+        point end=point (0.5-cellnoise(1+(v*i),1+(u*i)),0.5+cellnoise(1+(v*i),1+(u*i)),0);
+        dist=distance(start,end,here);
+        inLine = inLine + 1-smoothstep(0.01+fuzz,0.01-fuzz,dist);
+    }
+
 	//generate the dirt based on the dirtValue
 	point dirtSpace = point(P[0]* 10,P[1]* 10,P[2]* 10);
 	color dirtNoise = noise("perlin",dirtSpace);
@@ -86,4 +111,5 @@ shader chestShader
 	resultRGB = mix(resultRGB,color(0,0,0),alpha);
 	
 	resultDisplacement = circleCheck * -dispScale;
+    resultDisplacement = resultDisplacement + (inLine * -scratchDispScale);
 }

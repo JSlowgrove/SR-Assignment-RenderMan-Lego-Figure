@@ -1,21 +1,35 @@
 shader legsShader(
     color colourIn = color(0,0,0),
-	float dispScale=0.0001,
+	float dispScale=0.00075,
     float dirtValue=0,
     output color Cout=0,
-	//output float resultDisplacement=0
+	output float resultDisplacement=0
 )
-{   
-    point customSpace = point(P[0]* 100,P[1]* 100,P[2]* 100);
-    float perlinNoise = noise("perlin",customSpace);
+{
+    float fuzz=0.025;
+    float dist;
+    float inLine;
+	point PP=transform("legsCoords", P);
+	float s=PP[0];
+	float t=PP[1];
+    point here=point(u,v,0);
 
-	//resultDisplacement = perlinNoise * -dispScale;
+    // generate damage based on damage value
+    for(int i = 0; i < 3; ++i) 
+    {
+        point start=point (cellnoise(s*i,t*i),cellnoise(s*i,t*i),0);
+        point end=point (cellnoise(0.5+(s*i),0.5+(t*i)),cellnoise(0.5+(s*i),0.5+(t*i)),0);
+        dist=distance(start,end,here);
+        inLine=1-smoothstep(0.01+fuzz,0.01-fuzz,dist);
+    }
+
 
     //generate the dirt based on the dirtValue
 	point dirtSpace = point(P[0]* 10,P[1]* 10,P[2]* 10);
 	color dirtNoise = noise("perlin",dirtSpace);
 	float dirtAlpha = dirtNoise[0] * dirtValue;
 	color resultRGB = mix(colourIn,color(0,0,0),dirtAlpha);
-
     Cout = resultRGB;
+
+    resultDisplacement = inLine * -dispScale;
 }

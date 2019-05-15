@@ -4,7 +4,7 @@ shader headShader(
     string TextureName="",
     float s=0 [[int lockgeom=0]],
     float t=0 [[int lockgeom=0]],
-    float dirtValue=0,
+    float dirtValue=0.3,
     output	color Cout=0
 
 )
