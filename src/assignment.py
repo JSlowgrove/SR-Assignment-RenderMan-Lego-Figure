@@ -70,9 +70,11 @@ def legsShader(legsColour) :
 
 # the definiton of the shader to use on the head
 def headShader(headColour) :
+	ri.CoordinateSystem("headCoords")
 	ri.Pattern('headShader','headShader', 
 	{ 
-		'color colourIn' : headColour
+		'color colourIn' : headColour,
+		'string TextureName' : ["../img/face.tx"]
 	})
 	ri.Bxdf('PxrSurface', 'plastic',
 	{
@@ -206,6 +208,7 @@ def drawScene(ri,chestType, chestBaseColour, chestDetailColour, headColour, legs
 	ri.TransformBegin() 
 	ri.Translate(-0.13,0.2,0.1)
 	ri.TransformBegin() 
+	ri.Rotate(326,0,1,0)
 	head(0.17,0.15,0.17)
 	ri.TransformEnd()
 	ri.Translate(0,-0.2,0)
@@ -326,9 +329,14 @@ def drawScene(ri,chestType, chestBaseColour, chestDetailColour, headColour, legs
 # the main function
 if __name__ == '__main__':
 
+	# A boolean for the angle to generate
+	altAngle = False
+	# The type of output to use, default is it
+	outputType = "it"
+
 	# Initalise the default values for the figure generaion
-	chestType = "check"
-	chestBaseColour = [0,0,0.3]
+	chestType = "blank"
+	chestBaseColour = [0.01,0.01,0.2]
 	chestDetailColour = [1,1,1]
 	headColour = [convertColourValue(220),convertColourValue(150),convertColourValue(10)]
 	legsColour = [0.6,0,0]
@@ -371,6 +379,21 @@ if __name__ == '__main__':
 				# load the colour from the command
 				headColour = loadColourCmd(sys.argv[i+1], sys.argv[i+2], headColour)
 
+		#check for alt angle command
+		for i in range(0, len(sys.argv)):
+			if string.lower(sys.argv[i]) == "-alt" or string.lower(sys.argv[i]) == "--alternate-angle":
+				# set the alt angle to be true
+				altAngle = True
+
+		#check for output command
+		for i in range(0, len(sys.argv)):
+			if string.lower(sys.argv[i]) == "-o" or string.lower(sys.argv[i]) == "--output":
+				# check if valid output type
+				if sys.argv[i+1] == "it" or sys.argv[i+1] == "rib" or sys.argv[i+1] == "exr":
+					outputType = sys.argv[i+1]
+					print "Using '" + outputType + "' as output type"
+				else:
+					print "Invalid output type passed in, using default type"
 
 
 	ri = prman.Ri() # create an instance of the RenderMan interface
@@ -379,12 +402,18 @@ if __name__ == '__main__':
 	filename = "assignment.rib"
 	ri.ArchiveRecord(ri.COMMENT, 'assignment.rib')
 
-	# Initalise Renderman in Python
-	ri.Begin("__render") # render to it
-	#ri.Begin(filename) # write to a .rib
-	# Specify the output
-	ri.Display("assignment.exr", "it", "rgba") # render to it
-	#ri.Display("assignment.exr", "openexr", "rgba") # export as .exr
+	# Initalise Renderman in Python based on output option
+	if outputType == "it" or outputType == "exr" :
+		ri.Begin("__render") # render to it
+	else :
+		ri.Begin(filename) # write to a .rib
+
+	# Specify the output based on output option
+	if outputType == "it" or outputType =="rib" :
+		ri.Display("assignment.exr", "it", "rgba") # render to it
+	else :
+		ri.Display("assignment.exr", "openexr", "rgba") # export as .exr
+	
 	# Specify 1080p resolution 1:1 pixel Aspect ratio
 	ri.Format(1920,1080,1)
 	# set the projection to perspective
@@ -405,10 +434,11 @@ if __name__ == '__main__':
 
 	# Start the world
 	ri.WorldBegin()
-
-	# rotate the scene for 2nd image
 	ri.TransformBegin()
-	#ri.Rotate(25,0,1,0)
+
+	# rotate the scene for alternate angle
+	if altAngle:
+		ri.Rotate(25,0,1,0)
 
 	###################################LIGHT BEGIN###################################
 	#hdr light & background
