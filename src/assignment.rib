@@ -499,7 +499,7 @@ WorldBegin
 				CoordinateSystem "chestCoords"
 				Attribute "displacementbound" "sphere" [1] "coordinatesystem" ["shader"]
 				Displace "PxrDisplace" "myDisp" "reference float dispScalar" ["chestShader:resultDisplacement"] "float dispAmount" [2]
-				Pattern "chestShader" "chestShader" "string chestType" ["blank"] "color detailColour" [1 1 1] "color baseColour" [0.0199999996 0.0199999996 0.400000006] "float dirtValue" [0.300000012]
+				Pattern "chestShader" "chestShader" "string chestType" ["blank"] "int damage" [3] "color detailColour" [1 1 1] "color baseColour" [0.0199999996 0.0199999996 0.400000006] "float dirtValue" [0.300000012]
 				Bxdf "PxrSurface" "plastic" "reference color diffuseColor" ["chestShader:resultRGB"] "float glassRoughness" [0.200000003] "float reflectionGain" [1] "int diffuseDoubleSided" [1]
 				Attribute "identifier" "name" ["chest"]
 				TransformBegin 
@@ -550,7 +550,7 @@ WorldBegin
 				CoordinateSystem "legsCoords"
 				Attribute "displacementbound" "sphere" [1] "coordinatesystem" ["shader"]
 				Displace "PxrDisplace" "myDisp" "reference float dispScalar" ["legsShader:resultDisplacement"] "float dispAmount" [2]
-				Pattern "legsShader" "legsShader" "color colourIn" [0.600000024 0 0] "float dirtValue" [0.300000012]
+				Pattern "legsShader" "legsShader" "int damage" [3] "color colourIn" [0.600000024 0 0] "float dirtValue" [0.300000012]
 				Bxdf "PxrSurface" "plastic" "reference color diffuseColor" ["legsShader:Cout"] "float glassRoughness" [0.200000003] "float reflectionGain" [1] "int diffuseDoubleSided" [1]
 				TransformBegin 
 					#waist

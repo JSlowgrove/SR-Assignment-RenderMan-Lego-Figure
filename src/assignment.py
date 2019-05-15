@@ -477,7 +477,10 @@ if __name__ == '__main__':
 	ri.Projection(ri.PERSPECTIVE,{ri.FOV:50}) 
 
 	# set the depth of field (fstop, focal length, focal distance)
-	ri.DepthOfField(1,0.1,3)
+	if not altAngle:
+		ri.DepthOfField(1,0.1,3)
+	else:
+		ri.DepthOfField(1,0.05,3)
 
 	# update render type to apply shadows
 	ri.Hider('raytrace', {'int incremental' :[1]})
